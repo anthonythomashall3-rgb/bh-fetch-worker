@@ -1,0 +1,9 @@
+# 735: ICE BofA spread histories FRED dropped in 2023 (now only 3 years on FRED): the last full Wayback captures of fredgraph.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLC0A0CM fredgraph_BAMLC0A0CM_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLC0A4CBBB fredgraph_BAMLC0A4CBBB_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A3HYC fredgraph_BAMLH0A3HYC_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2EY fredgraph_BAMLH0A0HYM2EY_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLC0A1CAAA fredgraph_BAMLC0A1CAAA_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLHE00EHYIOAS fredgraph_BAMLHE00EHYIOAS_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLC0A0CMEY fredgraph_BAMLC0A0CMEY_wb20230601.csv
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLEMCBPIOAS fredgraph_BAMLEMCBPIOAS_wb20230601.csv

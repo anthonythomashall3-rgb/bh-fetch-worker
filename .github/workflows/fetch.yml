@@ -28,7 +28,7 @@ jobs:
             fetch_one() { url="$1"; out="$2"; d="$3"
               [ -z "$out" ] && out=$(printf '%s' "$url" | sed 's#https\?://##; s#[^A-Za-z0-9._-]#_#g' | cut -c1-180)
               for try in 1 2 3; do
-                code=$(curl -sSL --retry 2 --max-time 120 -A 'bristow-hall-fetch/1.0 (research; contact via github)' -o "$d/$out" -w '%{http_code}' "$url" 2>>"$d/_errors.txt") && [ "$code" = "200" ] && { echo "$code $url $out" >> "$d/_receipts.txt"; return 0; }
+                code=$(curl -sSL --compressed --retry 2 --max-time 120 -A 'bristow-hall-fetch/1.0 (research; contact via github)' -o "$d/$out" -w '%{http_code}' "$url" 2>>"$d/_errors.txt") && [ "$code" = "200" ] && { echo "$code $url $out" >> "$d/_receipts.txt"; return 0; }
                 echo "try $try $code $url" >> "$d/_errors.txt"; sleep $((try * 5))
               done; echo "FAIL $code $url" >> "$d/_receipts.txt"; rm -f "$d/$out"; return 1; }
             export -f fetch_one
