@@ -1,0 +1,3 @@
+# test queue (735): one wayback capture, one NY Fed file
+https://web.archive.org/web/20230601000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2 fredgraph_BAMLH0A0HYM2_wb20230601.csv
+https://www.newyorkfed.org/medialibrary/media/research/capital_markets/allmonth.xls nyfed_allmonth.xls

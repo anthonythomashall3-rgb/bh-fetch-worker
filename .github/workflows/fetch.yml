@@ -1,0 +1,44 @@
+# bh-fetch-worker (735, 15 Oct 2026; no AI at run time): a second public address for hosts that throttle per IP (Wayback, FRED API,
+# archive.org bulk). Push a list of URLs as queue/<name>.txt (one URL per line; '<url> <outname>' to name the file) and the runner
+# fetches them (8 at once, 3 tries, polite to web.archive.org) and uploads the results as the workflow artifact <name>.
+# The Mac side: 735/code/gh_fetch_735.sh push <list.txt> | pull <name> <collection folder>.
+name: fetch
+on:
+  push:
+    paths: ['queue/*.txt']
+  workflow_dispatch:
+    inputs:
+      name: {description: 'queue file name (without .txt)', required: true}
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch
+        shell: bash
+        run: |
+          set -u
+          mkdir -p out
+          if [ -n "${{ github.event.inputs.name || '' }}" ]; then lists="queue/${{ github.event.inputs.name }}.txt"; else lists=$(git diff --name-only HEAD~1 HEAD -- 'queue/*.txt' 2>/dev/null || ls queue/*.txt); fi
+          [ -z "$lists" ] && lists=$(ls queue/*.txt)
+          for L in $lists; do
+            name=$(basename "$L" .txt); mkdir -p "out/$name"
+            grep -v '^\s*#' "$L" | grep -v '^\s*$' > "out/$name.list"
+            fetch_one() { url="$1"; out="$2"; d="$3"
+              [ -z "$out" ] && out=$(printf '%s' "$url" | sed 's#https\?://##; s#[^A-Za-z0-9._-]#_#g' | cut -c1-180)
+              for try in 1 2 3; do
+                code=$(curl -sSL --retry 2 --max-time 120 -A 'bristow-hall-fetch/1.0 (research; contact via github)' -o "$d/$out" -w '%{http_code}' "$url" 2>>"$d/_errors.txt") && [ "$code" = "200" ] && { echo "$code $url $out" >> "$d/_receipts.txt"; return 0; }
+                echo "try $try $code $url" >> "$d/_errors.txt"; sleep $((try * 5))
+              done; echo "FAIL $code $url" >> "$d/_receipts.txt"; rm -f "$d/$out"; return 1; }
+            export -f fetch_one
+            if grep -q 'web.archive.org' "out/$name.list"; then P=2; else P=8; fi   # Wayback: 2 at once, politely
+            cat "out/$name.list" | xargs -P $P -L 1 bash -c 'fetch_one "$0" "$1" "'"out/$name"'"'
+            echo "$name: $(grep -c '^200' out/$name/_receipts.txt 2>/dev/null || echo 0) ok, $(grep -c '^FAIL' out/$name/_receipts.txt 2>/dev/null || echo 0) failed"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fetched
+          path: out
+          retention-days: 14
+          if-no-files-found: warn
