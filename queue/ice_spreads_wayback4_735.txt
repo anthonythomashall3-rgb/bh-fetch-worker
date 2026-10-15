@@ -1,0 +1,15 @@
+# 735: the 2021-2023 gap: latest pre-cut captures of FRED's text download
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLC0A0CM.txt fred_data_BAMLC0A0CM_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLC0A0CM.txt fred_data_BAMLC0A0CM_wb20230301.txt
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLH0A3HYC.txt fred_data_BAMLH0A3HYC_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLH0A3HYC.txt fred_data_BAMLH0A3HYC_wb20230301.txt
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLH0A0HYM2EY.txt fred_data_BAMLH0A0HYM2EY_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLH0A0HYM2EY.txt fred_data_BAMLH0A0HYM2EY_wb20230301.txt
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLC0A0CMEY.txt fred_data_BAMLC0A0CMEY_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLC0A0CMEY.txt fred_data_BAMLC0A0CMEY_wb20230301.txt
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLC0A1CAAA.txt fred_data_BAMLC0A1CAAA_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLC0A1CAAA.txt fred_data_BAMLC0A1CAAA_wb20230301.txt
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLHE00EHYIOAS.txt fred_data_BAMLHE00EHYIOAS_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLHE00EHYIOAS.txt fred_data_BAMLHE00EHYIOAS_wb20230301.txt
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLEMCBPIOAS.txt fred_data_BAMLEMCBPIOAS_wb20230915.txt
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/data/BAMLEMCBPIOAS.txt fred_data_BAMLEMCBPIOAS_wb20230301.txt
