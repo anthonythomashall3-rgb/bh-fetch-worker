@@ -33,10 +33,11 @@ jobs:
               done; echo "FAIL $code $url" >> "$d/_receipts.txt"; rm -f "$d/$out"; return 1; }
             export -f fetch_one
             if grep -q 'web.archive.org' "out/$name.list"; then P=2; else P=8; fi   # Wayback: 2 at once, politely
-            cat "out/$name.list" | xargs -P $P -L 1 bash -c 'fetch_one "$0" "$1" "'"out/$name"'"'
+            cat "out/$name.list" | xargs -P $P -L 1 bash -c 'fetch_one "$0" "$1" "'"out/$name"'"' || true
             echo "$name: $(grep -c '^200' out/$name/_receipts.txt 2>/dev/null || echo 0) ok, $(grep -c '^FAIL' out/$name/_receipts.txt 2>/dev/null || echo 0) failed"
           done
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: fetched
           path: out
