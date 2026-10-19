@@ -1,0 +1,5 @@
+# 771: second readings for BAMLH0A0HYM2 2022-07..2023-09 (the only single-reading stretch of the daily history): FRED text file captures
+https://web.archive.org/web/20230915000000id_/https://fred.stlouisfed.org/data/BAMLH0A0HYM2.txt fred_data_BAMLH0A0HYM2_wb20230915.txt
+https://web.archive.org/web/20231201000000id_/https://fred.stlouisfed.org/data/BAMLH0A0HYM2.txt fred_data_BAMLH0A0HYM2_wb20231201.txt
+https://web.archive.org/web/20240301000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2 fredgraph_BAMLH0A0HYM2_wb20240301.csv
+https://web.archive.org/web/20230301000000id_/https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2 fredgraph_BAMLH0A0HYM2_wb20230301.csv
