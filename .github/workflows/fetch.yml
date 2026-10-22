@@ -1,46 +1,68 @@
-# bh-fetch-worker (735, 15 Oct 2026; no AI at run time): a second public address for hosts that throttle per IP (Wayback, FRED API,
-# archive.org bulk). Push a list of URLs as queue/<name>.txt (one URL per line; '<url> <outname>' to name the file) and the runner
-# fetches them (8 at once, 3 tries, polite to web.archive.org) and uploads the results as the workflow artifact <name>.
-# The Mac side: 735/code/gh_fetch_735.sh push <list.txt> | pull <name> <collection folder>.
+# bh-fetch-worker (735, 15 Oct 2026; 807, 21 Oct 2026; no AI at run time): a second public address for hosts that throttle per IP
+# (Wayback, FRED API, archive.org bulk). Push lists of URLs as queue/<name>.txt (one URL per line; '<url> <outname>' to name the
+# file). 807: every queue file in the push is its own job (up to 12 at once, each runner on its own address: Wayback paces per
+# address, so 12 runners fetch 12x faster), 90 minutes each, and every job uploads its own artifact fetched-<name> even when it
+# times out. workflow_dispatch names=all re-runs every queue file; names=a,b runs those. The Mac side: 735/code/gh_fetch_735.sh,
+# 735/code/wayback_via_gh_735.py pull (downloads every artifact of every completed run, success or not).
 name: fetch
 on:
   push:
     paths: ['queue/*.txt']
   workflow_dispatch:
     inputs:
-      name: {description: 'queue file name (without .txt)', required: true}
+      names: {description: 'queue file names without .txt, comma-separated, or all', required: true}
 jobs:
-  fetch:
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    outputs:
+      names: ${{ steps.l.outputs.names }}
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 2}
+      - id: l
+        shell: bash
+        run: |
+          set -u
+          inp="${{ github.event.inputs.names || '' }}"
+          if [ "$inp" = "all" ]; then lists=$(ls queue/*.txt)
+          elif [ -n "$inp" ]; then lists=$(echo "$inp" | tr ',' '\n' | sed 's#^#queue/#; s#$#.txt#')
+          else lists=$(git diff --name-only HEAD~1 HEAD -- 'queue/*.txt' 2>/dev/null); fi
+          [ -z "$lists" ] && lists=$(ls -t queue/*.txt | head -1)
+          names=$(for L in $lists; do [ -f "$L" ] && basename "$L" .txt; done | python3 -c 'import sys,json; print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')
+          echo "names=$names" >> "$GITHUB_OUTPUT"; echo "$names"
+  fetch:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.names != '[]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        name: ${{ fromJSON(needs.prepare.outputs.names) }}
+    steps:
+      - uses: actions/checkout@v4
       - name: fetch
         shell: bash
         run: |
           set -u
-          mkdir -p out
-          if [ -n "${{ github.event.inputs.name || '' }}" ]; then lists="queue/${{ github.event.inputs.name }}.txt"; else lists=$(git diff --name-only HEAD~1 HEAD -- 'queue/*.txt' 2>/dev/null || ls queue/*.txt); fi
-          [ -z "$lists" ] && lists=$(ls queue/*.txt)
-          for L in $lists; do
-            name=$(basename "$L" .txt); mkdir -p "out/$name"
-            grep -v '^\s*#' "$L" | grep -v '^\s*$' > "out/$name.list"
-            fetch_one() { url="$1"; out="$2"; d="$3"
-              [ -z "$out" ] && out=$(printf '%s' "$url" | sed 's#https\?://##; s#[^A-Za-z0-9._-]#_#g' | cut -c1-180)
-              for try in 1 2 3; do
-                code=$(curl -sSL --compressed --retry 2 --max-time 120 -A 'bristow-hall-fetch/1.0 (research; contact via github)' -o "$d/$out" -w '%{http_code}' "$url" 2>>"$d/_errors.txt") && [ "$code" = "200" ] && { echo "$code $url $out" >> "$d/_receipts.txt"; return 0; }
-                echo "try $try $code $url" >> "$d/_errors.txt"; sleep $((try * 5))
-              done; echo "FAIL $code $url" >> "$d/_receipts.txt"; rm -f "$d/$out"; return 1; }
-            export -f fetch_one
-            if grep -q 'web.archive.org' "out/$name.list"; then P=2; else P=8; fi   # Wayback: 2 at once, politely
-            cat "out/$name.list" | xargs -P $P -L 1 bash -c 'fetch_one "$0" "$1" "'"out/$name"'"' || true
-            echo "$name: $(grep -c '^200' out/$name/_receipts.txt 2>/dev/null || echo 0) ok, $(grep -c '^FAIL' out/$name/_receipts.txt 2>/dev/null || echo 0) failed"
-          done
+          name="${{ matrix.name }}"; L="queue/$name.txt"; mkdir -p "out/$name"
+          grep -v '^\s*#' "$L" | grep -v '^\s*$' > "out/$name.list"
+          fetch_one() { url="$1"; out="$2"; d="$3"
+            [ -z "$out" ] && out=$(printf '%s' "$url" | sed 's#https\?://##; s#[^A-Za-z0-9._-]#_#g' | cut -c1-180)
+            for try in 1 2 3; do
+              code=$(curl -sSL --compressed --retry 2 --max-time 120 -A 'bristow-hall-fetch/1.0 (research; contact via github)' -o "$d/$out" -w '%{http_code}' "$url" 2>>"$d/_errors.txt") && [ "$code" = "200" ] && { echo "$code $url $out" >> "$d/_receipts.txt"; return 0; }
+              [ "$code" = "404" ] && { echo "404 $url $out" >> "$d/_receipts.txt"; rm -f "$d/$out"; return 0; }
+              echo "try $try $code $url" >> "$d/_errors.txt"; sleep $((try * 5))
+            done; echo "FAIL $code $url" >> "$d/_receipts.txt"; rm -f "$d/$out"; return 1; }
+          export -f fetch_one
+          if grep -q 'web.archive.org' "out/$name.list"; then P=2; else P=8; fi   # Wayback: 2 at once per address, politely
+          cat "out/$name.list" | xargs -P $P -L 1 bash -c 'fetch_one "$0" "$1" "'"out/$name"'"' || true
+          echo "$name: $(grep -c '^200' out/$name/_receipts.txt 2>/dev/null || echo 0) ok, $(grep -c '^404' out/$name/_receipts.txt 2>/dev/null || echo 0) gone, $(grep -c '^FAIL' out/$name/_receipts.txt 2>/dev/null || echo 0) failed"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fetched
+          name: fetched-${{ matrix.name }}
           path: out
           retention-days: 14
           if-no-files-found: warn
