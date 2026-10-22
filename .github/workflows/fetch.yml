@@ -1,7 +1,7 @@
 # bh-fetch-worker (735, 15 Oct 2026; 807, 21 Oct 2026; no AI at run time): a second public address for hosts that throttle per IP
 # (Wayback, FRED API, archive.org bulk). Push lists of URLs as queue/<name>.txt (one URL per line; '<url> <outname>' to name the
-# file). 807: every queue file in the push is its own job (up to 12 at once, each runner on its own address: Wayback paces per
-# address, so 12 runners fetch 12x faster), 90 minutes each, and every job uploads its own artifact fetched-<name> even when it
+# file). 807: every queue file in the push is its own job (up to 20 at once, each runner on its own address: Wayback paces per
+# address, so 20 runners fetch 20x faster), 90 minutes each, and every job uploads its own artifact fetched-<name> even when it
 # times out. workflow_dispatch names=all re-runs every queue file; names=a,b runs those. The Mac side: 735/code/gh_fetch_735.sh,
 # 735/code/wayback_via_gh_735.py pull (downloads every artifact of every completed run, success or not).
 name: fetch
@@ -37,7 +37,7 @@ jobs:
     timeout-minutes: 90
     strategy:
       fail-fast: false
-      max-parallel: 12
+      max-parallel: 20
       matrix:
         name: ${{ fromJSON(needs.prepare.outputs.names) }}
     steps:
