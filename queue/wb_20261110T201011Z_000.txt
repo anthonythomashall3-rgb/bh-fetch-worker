@@ -1,0 +1,10 @@
+# 735 wayback captures owed by 733 (chunk 0)
+http://web.archive.org/web/20060928145106id_/http://www.bls.gov/news.release/archives/jolts_07112006.pdf bls_jolts_archive_2001--20060928145106__http_www_bls_gov_news_release_archives_jolts_07112006_pdf.pdf
+http://web.archive.org/web/20081005121104id_/http://www.bls.gov/news.release/archives/jolts_08082007.pdf bls_jolts_archive_2001--20081005121104__http_www_bls_gov_news_release_archives_jolts_08082007_pdf.pdf
+http://web.archive.org/web/20080923185743id_/http://www.bls.gov/news.release/archives/jolts_08122008.pdf bls_jolts_archive_2001--20080923185743__http_www_bls_gov_news_release_archives_jolts_08122008_pdf.pdf
+http://web.archive.org/web/20100603045843id_/http://www.bls.gov/news.release/archives/jolts_08122009.htm bls_jolts_archive_2001--20100603045843__http_www_bls_gov_news_release_archives_jolts_08122009_htm.html
+http://web.archive.org/web/20041026093116id_/http://www.bls.gov:80/news.release/archives/jolts_09082004.pdf bls_jolts_archive_2001--20041026093116__http_www_bls_gov_80_news_release_archives_jolts_09082004_pdf.pdf
+http://web.archive.org/web/20100601172955id_/http://www.bls.gov/news.release/archives/jolts_09092009.pdf bls_jolts_archive_2001--20100601172955__http_www_bls_gov_news_release_archives_jolts_09092009_pdf.pdf
+http://web.archive.org/web/20081106051109id_/http://www.bls.gov/news.release/archives/jolts_10072008.pdf bls_jolts_archive_2001--20081106051109__http_www_bls_gov_news_release_archives_jolts_10072008_pdf.pdf
+http://web.archive.org/web/20260929170654id_/https://www.conference-board.org/topics/consumer-confidence/gtm.js cb_consumer_confidence_new--20260929170654__https_www_conference_board_org_topics_consumer_confidence_gtm_js.html
+http://web.archive.org/web/20261012163115id_/https://www.conference-board.org/topics/consumer-confidence/index.cfm?hsa_acc=3928428213&hsa_cam=6460278425&hsa_grp=185471124182&hsa_ad=7826 cb_consumer_confidence_new--20261012163115__index_cfm_hsa_acc_3928428213_hsa_cam_6460278425_hsa_grp_185471124182_hsa_ad_7826.html
